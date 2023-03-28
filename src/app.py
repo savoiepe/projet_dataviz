@@ -319,7 +319,8 @@ app.layout = html.Div(
                                 "border": "1.5px black solid",
                                 "height": "40px",
                                 "text-align": "center",
-                                "marginLeft": "300px",
+                                "marginLeft": "700px",
+                                "marginBottom": "60px",
                             },
                         ),
                         html.Button(
@@ -333,6 +334,7 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                                 "marginLeft": "20px",
+                                "marginBottom": "60px",
                             },
                         ),
                         html.Button(
@@ -346,6 +348,7 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                                 "marginLeft": "20px",
+                                "marginBottom": "60px",
                             },
                         ),
                     ]
