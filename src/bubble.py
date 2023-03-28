@@ -36,12 +36,11 @@ def get_plot(my_df, gdp_range, co2_range):
         size="Population",
         color="Continent",
         size_max=30,
-        # size_min=6,
         log_x=True,
         log_y=True,
         range_x=gdp_range,
         range_y=co2_range,
-        color_discrete_sequence=px.colors.qualitative.Set1,
+        color_discrete_sequence=px.colors.sequential.ice,
     )
 
     fig.update_traces(hovertemplate=hover_template.get_bubble_hover_template())
@@ -64,97 +63,6 @@ def update_animation_hover_template(fig):
     for frame in fig.frames:
         for trace in frame.data:
             trace.update(hovertemplate=hover_template.get_bubble_hover_template())
-    return fig
-
-
-def update_animation_menu(fig):
-    """
-    Updates the animation menu to show the current year, and to remove
-    the unnecessary 'Stop' button.
-
-    Args:
-        fig: The figure containing the menu to update
-    Returns
-        The updated figure
-    """
-    # Update the animation menu
-    fig.update_layout(
-        updatemenus=[
-            dict(
-                type="buttons",
-                showactive=False,
-                buttons=[
-                    dict(
-                        label="Play",
-                        method="animate",
-                        args=[
-                            None,
-                            dict(
-                                frame=dict(duration=200, redraw=False),
-                                fromcurrent=True,
-                            ),
-                        ],
-                    ),
-                    dict(
-                        label="Pause",
-                        method="animate",
-                        args=[
-                            [None],
-                            dict(
-                                transition=dict(duration=0),
-                                frame=dict(duration=0, redraw=False),
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            dict(
-                type="buttons",
-                showactive=True,
-                buttons=[
-                    dict(
-                        label="2000",
-                        method="animate",
-                        args=[
-                            None,
-                            dict(
-                                frame=dict(duration=0, redraw=False),
-                                transition=dict(duration=0),
-                                fromcurrent=True,
-                                args=[
-                                    [0],
-                                    dict(
-                                        frame=dict(duration=0, redraw=True),
-                                        transition=dict(duration=0),
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    dict(
-                        label="2015",
-                        method="animate",
-                        args=[
-                            None,
-                            dict(
-                                frame=dict(duration=0, redraw=False),
-                                transition=dict(duration=0),
-                                fromcurrent=True,
-                                args=[
-                                    [1],
-                                    dict(
-                                        frame=dict(duration=0, redraw=True),
-                                        transition=dict(duration=0),
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-        ]
-    )
-
     return fig
 
 
