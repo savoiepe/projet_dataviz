@@ -130,40 +130,6 @@ app.layout = html.Div(className='content', children=[
 
 
 @app.callback(
-    Output('line-chart', 'figure'),
-    [Input('heatmap', 'clickData')]
-)
-def heatmap_clicked(click_data):
-    '''
-        When a cell in the heatmap is clicked, updates the
-        line chart to show the data for the corresponding
-        neighborhood and year. If there is no data to show,
-        displays a message.
-
-        Args:
-            The necessary inputs and states to update the
-            line chart.
-        Returns:
-            The necessary output values to update the line
-            chart.
-    '''
-    if click_data is None or click_data['points'][0]['z'] == 0:
-        fig = line_chart.get_empty_figure()
-        return fig
-
-    arrond = click_data['points'][0]['y']
-    year = click_data['points'][0]['x']
-
-    line_data = preprocess.get_daily_info(
-        dataframe,
-        arrond,
-        year)
-
-    line_fig = line_chart.get_figure(line_data, arrond, year)
-
-    return line_fig
-
-@app.callback(
     Output('container-button-basic', 'children'),
     Input('submit-val', 'n_clicks'),
     State('input-on-submit', 'value')
