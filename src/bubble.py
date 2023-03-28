@@ -3,7 +3,6 @@
 """
 
 import plotly.express as px
-import hover_template
 
 
 def get_plot(my_df, gdp_range, co2_range):
@@ -43,27 +42,9 @@ def get_plot(my_df, gdp_range, co2_range):
         color_discrete_sequence=px.colors.sequential.ice,
     )
 
-    fig.update_traces(hovertemplate=hover_template.get_bubble_hover_template())
 
     return fig
 
-
-def update_animation_hover_template(fig):
-    """
-    Sets the hover template of the figure,
-    as well as the hover template of each
-    trace of each animation frame of the figure
-
-    Args:
-        fig: The figure to update
-    Returns:
-        The updated figure
-    """
-    fig.update_layout(hovermode="closest")
-    for frame in fig.frames:
-        for trace in frame.data:
-            trace.update(hovertemplate=hover_template.get_bubble_hover_template())
-    return fig
 
 
 def update_axes_labels(fig):
