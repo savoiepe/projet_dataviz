@@ -2,7 +2,6 @@
     Contains some functions related to the creation of the heatmap.
 '''
 import plotly.express as px
-import hover_template
 
 
 def get_figure(data):

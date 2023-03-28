@@ -2,7 +2,6 @@
     Contains some functions related to the creation of the line chart.
 '''
 import plotly.express as px
-import hover_template
 
 from template import THEME
 
