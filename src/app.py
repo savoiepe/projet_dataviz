@@ -24,8 +24,7 @@ import template
 
 app = dash.Dash(__name__)
 app.title = "TP3 | INF8808"
-
-dataframe = pd.read_csv("./assets/data/arbres.csv")
+dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
 
 dataframe = preprocess.convert_dates(dataframe)
 dataframe = preprocess.filter_years(dataframe, 2010, 2020)
