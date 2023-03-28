@@ -1,21 +1,43 @@
 import plotly.graph_objects as go
+import pandas as pd
 
-fig = go.Figure(go.Barpolar(
-    r=[3.5, 1.5, 2.5, 4.5, 4.5, 4, 3],
-    theta=[65, 15, 210, 110, 312.5, 180, 270],
-    width=[20,15,10,20,15,30,15,],
-    marker_color=["#E4FF87", '#709BFF', '#709BFF', '#FFAA70', '#FFAA70', '#FFDF70', '#B6FFB4'],
-    marker_line_color="black",
-    marker_line_width=2,
-    opacity=0.8
-))
 
-fig.update_layout(
-    template=None,
-    polar = dict(
-        radialaxis = dict(range=[0, 5], showticklabels=False, ticks=''),
-        angularaxis = dict(showticklabels=False, ticks='')
+def get_plot(my_df):
+    # create a polar chart with 24 sectors
+    fig = go.Figure(
+        go.Barpolar(
+            r=my_df["value"],
+            theta=my_df["hour"] * 15,  # each sector is 360/24=15 degrees
+            marker=dict(
+                color=my_df["value"],
+                colorscale="Blues",
+                showscale=True,
+                colorbar=my_df(
+                    tickvals=[min(my_df["value"]), max(my_df["value"])],
+                    ticktext=["Low", "High"],
+                ),
+            ),
+        )
     )
-)
 
-fig.show()
+    # update the layout to make it look like a clock
+    fig.update_layout(
+        title="Hourly Data",
+        font=dict(
+            size=16,
+            color="black",
+        ),
+        polar=dict(
+            radialaxis=dict(visible=False, range=[0, max(my_df["value"])]),
+            angularaxis=dict(
+                visible=True,
+                tickmode="array",
+                tickvals=[i * 15 for i in range(24)],
+                ticktext=[str(i) for i in range(24)],
+                rotation=90,
+                direction="clockwise",
+            ),
+        ),
+    )
+
+    return fig
