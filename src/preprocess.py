@@ -2,125 +2,171 @@
     Contains some functions to preprocess the data used in the visualisation.
 '''
 import pandas as pd
+import numpy as np
+import re
+import datetime
 
+######################################################
+################## PREPROCESS GLOBAL #################
+######################################################
 
-def convert_dates(dataframe):
-    '''
-        Converts the dates in the dataframe to datetime objects.
+# Transformation du dataset pour l'ajout d'une colonne pays
+def add_countries(data):
+    media_to_country = {
+        'infobref':"Canada",
+        'latribune':"Canada",
+        'lavoixdunord':"France",
+        'ledevoir':"Canada",
+        'heidi.news':"Suisse",
+        'tdg.ch':"Suisse",
+        'letemps':"Suisse",
+        'leprogres.lyon':"France",
+        'sudouestfr':"France",
+        'journalmetro':"Canada",
+        'radio.canada.info':"Canada",
+        'rtlinfo':"Belgique",
+        'majmonactu':"Canada",
+        'noovo.info':"Canada",
+        'ouestfrance':"France",
+        'radpointca':"Canada",
+        '24heuresca':"Canada",
+        '_urbania':"Canada",
+        'tvasports':"Canada",
+        'rds.ca':"Canada",
+        'lefigarofr':"France",
+        'miseajour':"Belgique",
+        'rtsinfo':"Suisse",
+        'loopsider':"France",
+        'lequipe':"France",
+        'tf1info':"France",
+        'leparisien':"France",
+        'franceinfo':"France",
+        'lemondefr':"France",
+        'rmcsport':"France",
+        'bfmtv':"France",
+        'konbini':"France",
+        'brutofficiel':"France",
+        'hugodecrypte':"France"
+    }
 
-        Args:
-            dataframe: The dataframe to process
-        Returns:
-            The processed dataframe with datetime-formatted dates.
-    '''
-    # TODO : Convert dates
-    dataframe['Date_Plantation'] = pd.to_datetime(dataframe['Date_Plantation'], format='%Y-%m-%d')
-    return dataframe
+    data['pays'] = [media_to_country[media] for media in data['compte']]
 
+# Transformation du dataset pour la séparation de la date et heure
+def seperate_datetime(data):
+    data["dateHeure"] = pd.to_datetime(data["dateHeure"], format="%Y-%m-%d %H:%M:%S")
+    data['date'] = [dateheure.date() for dateheure in data['dateHeure']]
+    data['date_str'] = [dateheure.strftime('%Y-%m') for dateheure in data['dateHeure']]
+    data['time'] = [dateheure.time() for dateheure in data['dateHeure']]
+    data['hour'] = [dateheure.strftime('%H') for dateheure in data['dateHeure']]
+    data.drop(columns=['dateHeure'], inplace=True)
 
-def filter_years(dataframe, start, end):
-    '''
-        Filters the elements of the dataframe by date, making sure
-        they fall in the desired range.
-
-        Args:
-            dataframe: The dataframe to process
-            start: The starting year (inclusive)
-            end: The ending year (inclusive)
-        Returns:
-            The dataframe filtered by date.
-    '''
-    # TODO : Filter by dates
-    dataframe = dataframe.loc[(dataframe['Date_Plantation'] >= str(start)) & (dataframe['Date_Plantation'] <= str(end+1))]
-    return dataframe
-
-
-def summarize_yearly_counts(dataframe):
-    '''
-        Groups the data by neighborhood and year,
-        summing the number of trees planted in each neighborhood
-        each year.
-
-        Args:
-            dataframe: The dataframe to process
-        Returns:
-            The processed dataframe with column 'Counts'
-            containing the counts of planted
-            trees for each neighborhood each year.
-    '''
-    # TODO : Summarize df
-    dataframe = dataframe.groupby(["Arrond_Nom", dataframe['Date_Plantation'].dt.year]).size()
-    dataframe = pd.DataFrame(dataframe)
-    dataframe.columns = ["Counts"]
-    dataframe.reset_index(inplace=True)
-    dataframe['Date_Plantation'] = pd.to_datetime(dataframe['Date_Plantation'], format='%Y') + pd.offsets.YearEnd(1)
-    return dataframe
-
-
-def restructure_df(yearly_df):
-    '''
-        Restructures the dataframe into a format easier
-        to be displayed as a heatmap.
-
-        The resulting dataframe should have as index
-        the names of the neighborhoods, while the columns
-        should be each considered year. The values
-        in each cell represent the number of trees
-        planted by the given neighborhood the given year.
-
-        Any empty cells are filled with zeros.
-
-        Args:
-            yearly_df: The dataframe to process
-        Returns:
-            The restructured dataframe
-    '''
-    # TODO : Restructure df and fill empty cells with 0
-    df = yearly_df.pivot(
-        index='Arrond_Nom',
-        columns='Date_Plantation',
-        values='Counts')
-    df = df.fillna(0)
-
-    return df
-
-
-def get_daily_info(dataframe, arrond, year):
-    '''
-        From the given dataframe, gets
-        the daily amount of planted trees
-        in the given neighborhood and year.
-
-        Args:
-            dataframe: The dataframe to process
-            arrond: The desired neighborhood
-            year: The desired year
-        Returns:
-            The daily tree count data for that
-            neighborhood and year.
-    '''
-    # TODO : Get daily tree count data and return
-    # On regroupe le dataframe par arrondissement et par jours chronologiques
-    dataframe = dataframe.groupby(["Arrond_Nom", dataframe['Date_Plantation']]).size()
-
-    # On extrait l'arrondissement souhaité de notre dataframe
-    dataframe = pd.DataFrame(dataframe.loc[arrond])
-    dataframe.columns = ["Counts"]
+# Transformation du dataset pour extraire les tags des descriptions
+def extract_tags_from_descriptions(data):
     
-    # On retransforme notre dataframe correctement avec le bon nom de colonnes
-    dataframe.reset_index(inplace=True)
+    def desc_to_tags(desc):
+        if type(desc) != str :
+            return []
+        desc = desc.replace('#', ' #').split()
+        tags = [re.sub(r'[^\w\s]', '', tag.lower()) for tag in desc if tag.startswith("#")]
+        return tags
+
+    data['tags'] = data['description'].apply(desc_to_tags)
+
+# Transformation du dataset pour regrouper les durées en catégories distrinctes
+def group_length(data):
+    data['durée'] = ['<' + str(np.ceil(d / 60) * 60) if d > 0 else '<60' for d in data['durée'] ]
+
+# Transformation du dataset pour enlever les colonnes inutiles
+def remove_unused_columns(data):
+    data.drop(columns=['texteSurimposé', 'url', 'musiqueTitre', 'musiqueArtiste', 'description'], inplace = True)
+
+# Transformation complète initiale du dataset
+def preprocess_initial(data):
+    add_countries(data)
+    seperate_datetime(data)
+    extract_tags_from_descriptions(data)
+    group_length(data)
+    remove_unused_columns(data)
+
+
+######################################################
+################## DIAGRAMME À BULLE #################
+######################################################
+
+def filter_by_year(data, year):
+    assert year in [2019,2020,2021,2022], "Incorrect year"
+    return data[(data['date'] >= datetime.date(year,1,1)) & (data['date'] <= datetime.date(year,12,31))]
+
+# Transformation des données pour le graphique à bulle en fonction des tags
+def explode_tags(data):
+    # Exploser les listes de tags en lignes
+    data_tag = data.explode('tags')
     
-    # On extrait l'année souhaitée de notre dataframe
-    dataframe = dataframe.loc[(dataframe['Date_Plantation'].dt.year == year)]
+    # Regrouper les données par tags
+    data_tag = pd.DataFrame(data_tag.groupby([data_tag['tags']], as_index=False).agg({'nbVues':'mean', 'nbPartages':'mean','nbCommentaires':'mean','compte':'size'}).round())
+    data_tag.rename(columns={"compte": "n_post"}, inplace = True)
     
-    dataframe = pd.DataFrame(dataframe)
+    # Sort la liste en fonction des tags les plus courant
+    data_tag = data_tag.sort_values('n_post', ascending = False)
     
-    # On ajoute les dates manquantes et on set la valeur correspondante à 0
-    start = dataframe['Date_Plantation'].iloc[0].strftime("%Y-%m-%d")
-    end = dataframe['Date_Plantation'].iloc[-1].strftime("%Y-%m-%d")
-    idx = pd.date_range(start,end)
-    dataframe = dataframe.set_index('Date_Plantation').reindex(idx).fillna(0).reset_index()
+    # Retourner seulement le top 100 tags
+    return data_tag[:100]
+
+# Transformation des données pour le graphique à bulle
+# group_by_column peut avoir 3 valeurs différentes : "compte", "durée" ou "tags"
+# year peur avoir 5 valeurs différentes : 2019, 2020, 2021, 2022 ou "all"
+def bubble_graph(data, group_by_column, year = "all"):
+    if year != 'all':
+        data = filter_by_year(data, year)
+        
+    if group_by_column == 'compte':
+        return pd.DataFrame(data.groupby([data[group_by_column], data['pays']], as_index=False).mean().round())
     
-    # On retransforme les valeurs de la colonne "Counts" en entier
-    dataframe[['Counts']] = dataframe[['Counts']].astype(int)
-    return dataframe
+    if group_by_column == 'durée':
+        return pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean().round())
+    
+    if group_by_column == 'tags':
+        return explode_tags(data)
+    
+    
+######################################################
+################## DIAGRAMME À LIGNE #################
+######################################################    
+
+# Transformation du dataset pour filtrer les données en fonction des options sélectionnées
+# selection peut être None s'il n'y a pas de filter à faire, où un tuple (colonne, valeur) pour faire un filtre sur les données
+def filter_graph(data, selected):
+    assert len(selected) == 2, 'Format de la selection incorrect'
+    assert selected[0] in data.columns, 'selected[0] (' + str(selected[0]) + ') ne fait pas partie des colonnes'
+    
+    if selected[0] == 'tags' :
+        data = data.explode('tags')
+        
+    return data[data[selected[0]] == selected[1]]
+
+# Transformation du dataset pour le graphique à ligne
+# selection peut être None s'il n'y a pas de filter à faire, où un tuple (colonne, valeur) pour faire un filtre sur les données
+# year peur avoir 5 valeurs différentes : 2019, 2020, 2021, 2022 ou "all"
+def line_graph(data, selected=None, year = "all"):
+    if year != 'all':
+        data = filter_by_year(data, year)
+        
+    if selected is not None:
+        data = filter_graph(data, selected)
+    
+    # Group by date 
+    data = pd.DataFrame(data.groupby([data['date_str']], as_index=False).agg({'compte':'size'}))
+    data.rename(columns={"compte": "n_post"}, inplace = True)
+    
+    return data
+
+
+######################################################
+#################### PIE CHART #######################
+######################################################
+
+def pie_chart(data):
+    data = pd.DataFrame(data.groupby([data['hour']], as_index=False).agg({'compte':'size'}))
+    data.rename(columns={"compte": "n_post"}, inplace = True)
+    
+    return data
