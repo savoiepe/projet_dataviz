@@ -3,7 +3,7 @@
 
 '''
     File name: app.py
-    Author: Olivia Gélinas
+    Projet TikTok
     Course: INF8808
     Python Version: 3.8
 
