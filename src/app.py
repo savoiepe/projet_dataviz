@@ -2,7 +2,7 @@
 
 """
     File name: app.py
-    Author: Olivia Gélinas
+    Projet TikTok
     Course: INF8808
     Python Version: 3.8
 
@@ -12,6 +12,7 @@
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 
 import pandas as pd
@@ -23,13 +24,10 @@ import template
 
 
 app = dash.Dash(__name__)
-app.title = "TP3 | INF8808"
-dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
+app.title = "PROJET | INF8808"
 
-dataframe = preprocess.convert_dates(dataframe)
-dataframe = preprocess.filter_years(dataframe, 2010, 2020)
-yearly_df = preprocess.summarize_yearly_counts(dataframe)
-data = preprocess.restructure_df(yearly_df)
+dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
+preprocess.preprocess_initial(dataframe)
 
 template.create_custom_theme()
 template.set_default_theme()
@@ -282,7 +280,7 @@ app.layout = html.Div(
                         dcc.Graph(
                             id="line-chart",
                             className="graph",
-                            figure=line_chart.fig_test(yearly_df),
+                            figure=line_chart.get_empty_figure(),
                             config=dict(
                                 scrollZoom=False,
                                 showTips=False,
@@ -290,64 +288,13 @@ app.layout = html.Div(
                                 doubleClick=False,
                                 displayModeBar=False,
                             ),
-                            style={
-                                "margin-left": "30px",
-                                "width": "700px",
-                                "height": "700px",
-                            },
                         ),
-                        html.Div(
-                            [
-                                html.Button(
-                                    "Médias",
-                                    id="media-btn",
-                                    style={
-                                        "backgroundColor": "white",
-                                        "color": "black",
-                                        "width": "100px",
-                                        "border": "1.5px black solid",
-                                        "height": "40px",
-                                        "text-align": "center",
-                                        "marginLeft": "0",
-                                        "marginBottom": "20px",
-                                    },
-                                ),
-                                html.Button(
-                                    "Sujets",
-                                    id="sujet-btn",
-                                    style={
-                                        "backgroundColor": "white",
-                                        "color": "black",
-                                        "width": "100px",
-                                        "border": "1.5px black solid",
-                                        "height": "40px",
-                                        "text-align": "center",
-                                        "marginLeft": "20px",
-                                        "marginBottom": "20px",
-                                    },
-                                ),
-                                html.Button(
-                                    "Durées",
-                                    id="duree-btn",
-                                    style={
-                                        "backgroundColor": "white",
-                                        "color": "black",
-                                        "width": "100px",
-                                        "border": "1.5px black solid",
-                                        "height": "40px",
-                                        "text-align": "center",
-                                        "marginLeft": "20px",
-                                        "marginBottom": "20px",
-                                    },
-                                ),
-                            ]
-                        ),
-                    ],
+                    ]
                 ),
                 dcc.Graph(
                     id="heatmap",
                     className="graph",
-                    figure=line_chart.fig_test(yearly_df),
+                    figure=line_chart.get_empty_figure(),
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
@@ -355,55 +302,66 @@ app.layout = html.Div(
                         doubleClick=False,
                         displayModeBar=False,
                     ),
-                    style={"margin-left": "30px", "width": "700px", "height": "700px"},
                 ),
             ],
+        ),
+        html.Footer(
+            children=[
+                html.Div(
+                    [
+                        html.Button(
+                            "Médias",
+                            id="media-btn",
+                            style={
+                                "backgroundColor": "white",
+                                "color": "black",
+                                "width": "100px",
+                                "border": "1.5px black solid",
+                                "height": "40px",
+                                "text-align": "center",
+                                "marginLeft": "300px",
+                            },
+                        ),
+                        html.Button(
+                            "Sujets",
+                            id="sujet-btn",
+                            style={
+                                "backgroundColor": "white",
+                                "color": "black",
+                                "width": "100px",
+                                "border": "1.5px black solid",
+                                "height": "40px",
+                                "text-align": "center",
+                                "marginLeft": "20px",
+                            },
+                        ),
+                        html.Button(
+                            "Durées",
+                            id="duree-btn",
+                            style={
+                                "backgroundColor": "white",
+                                "color": "black",
+                                "width": "100px",
+                                "border": "1.5px black solid",
+                                "height": "40px",
+                                "text-align": "center",
+                                "marginLeft": "20px",
+                            },
+                        ),
+                    ]
+                ),
+            ]
         ),
     ],
 )
 
 
-# @app.callback(
-#     Output('line-chart', 'figure'),
-#     [Input('heatmap', 'clickData')]
-# )
-# def heatmap_clicked(click_data):
-#     '''
-#         When a cell in the heatmap is clicked, updates the
-#         line chart to show the data for the corresponding
-#         neighborhood and year. If there is no data to show,
-#         displays a message.
-
-#         Args:
-#             The necessary inputs and states to update the
-#             line chart.
-#         Returns:
-#             The necessary output values to update the line
-#             chart.
-#     '''
-#     if click_data is None or click_data['points'][0]['z'] == 0:
-#         fig = line_chart.get_empty_figure()
-#         return fig
-
-#     arrond = click_data['points'][0]['y']
-#     year = click_data['points'][0]['x']
-
-#     line_data = preprocess.get_daily_info(
-#         dataframe,
-#         arrond,
-#         year)
-
-#     line_fig = line_chart.get_figure(line_data, arrond, year)
-
-#     return line_fig
-
-# @app.callback(
-#     Output('container-button-basic', 'children'),
-#     Input('submit-val', 'n_clicks'),
-#     State('input-on-submit', 'value')
-# )
-# def update_output(n_clicks, value):
-#     return 'The input value was "{}" and the button has been clicked {} times'.format(
-#         value,
-#         n_clicks
-#     )
+@app.callback(
+    Output("container-button-basic", "children"),
+    Input("submit-val", "n_clicks"),
+    State("input-on-submit", "value"),
+)
+def update_output(n_clicks, value):
+    return 'The input value was "{}" and the button has been clicked {} times'.format(
+        value, n_clicks
+    )
