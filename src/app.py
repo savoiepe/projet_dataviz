@@ -20,6 +20,7 @@ import pandas as pd
 import preprocess
 import heatmap
 import line_chart
+import clock
 import template
 
 
@@ -28,6 +29,8 @@ app.title = "PROJET | INF8808"
 
 dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
 preprocess.preprocess_initial(dataframe)
+data_pie = preprocess.pie_chart(dataframe)
+
 
 template.create_custom_theme()
 template.set_default_theme()
@@ -189,17 +192,22 @@ app.layout = html.Div(
                                 "width": "25%",
                             },
                         ),
-                        html.Img(
-                            src="/assets/circle.png",
-                            style={
-                                "position": "relative",
-                                "top": "-70px",
-                                "height": "200px",
-                                "width": "200px",
-                                "padding": "10px",
-                                "margin-left": "150px",
-                                "margin-top": "30px",
-                            },
+                        html.Div(
+                            className="clock",
+                            children=[
+                                dcc.Graph(
+                                    id="clock",
+                                    className="graph",
+                                    figure=clock.get_clock(data_pie),
+                                    config=dict(
+                                        scrollZoom=False,
+                                        showTips=False,
+                                        showAxisDragHandles=False,
+                                        doubleClick=False,
+                                        displayModeBar=False,
+                                    ),
+                                )
+                            ],
                         ),
                     ],
                     style={

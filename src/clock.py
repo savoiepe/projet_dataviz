@@ -1,42 +1,4 @@
 import plotly.graph_objects as go
-import pandas as pd
-from preprocess import pie_chart
-
-
-data = pd.DataFrame(
-    {
-        "hour": range(24),
-        "n_post": [
-            2,
-            5,
-            8,
-            12,
-            15,
-            18,
-            20,
-            22,
-            23,
-            24,
-            25,
-            26,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            35,
-            34,
-            30,
-            25,
-            20,
-            5,
-        ],
-    }
-)
-
-
-# data = pie_chart(data)
 
 
 def get_clock(data):
@@ -87,7 +49,3 @@ def get_clock(data):
         ),
     )
     return fig
-
-
-fig = get_clock(data)
-fig.show()
