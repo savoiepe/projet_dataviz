@@ -168,5 +168,6 @@ def line_graph(data, selected=None, year = "all"):
 def pie_chart(data):
     data = pd.DataFrame(data.groupby([data['hour']], as_index=False).agg({'compte':'size'}))
     data.rename(columns={"compte": "n_post"}, inplace = True)
+    data = data.astype({'hour': 'int32'})
     
     return data
