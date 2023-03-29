@@ -41,35 +41,37 @@ data = pd.DataFrame(
 
 def get_clock(data):
 
-    # set the radial axis range to be the same for all hours
     max_value = max(data["n_post"])
     radial_range = [0, max_value + 5]
 
-    # create a polar chart with 24 sectors
     fig = go.Figure(
         go.Barpolar(
             r=[max_value] * 24,
             theta=data["hour"] * 15,  # each sector is 360/24=15 degrees
             marker=dict(
                 color=data["n_post"],
-                colorscale="Blues",  # Blues rend mieux que ice je pense
+                colorscale="Blues",  # Set a blue color (must be modified)
             ),
             width=15,
         )
     )
 
-    # update the layout to make it look like a clock
     fig.update_layout(
-        font=dict(
-            size=25,
-            color="black",
+        title=dict(
+            text="Heure propice pour poster",
+            x=0.5,  # Center title
+            y=0.02,  # Place title below the plot
+            font=dict(
+                size=20,
+                color="black",
+            ),
         ),
         polar=dict(
-            bgcolor="rgba(0,0,0,0)",  # Transparent background
+            bgcolor="rgba(0,0,0,0)",  # Remove grey background
             radialaxis=dict(
                 visible=True,
-                range=radial_range,  # set the radial axis range
-                tickvals=[0, max_value],  # set the tick values
+                range=radial_range,
+                tickvals=[0, max_value],
                 showticklabels=False,
             ),
             angularaxis=dict(
@@ -79,10 +81,11 @@ def get_clock(data):
                 ticktext=[str(i) for i in range(24)],
                 rotation=90,
                 direction="clockwise",
+                ticklen=80,  # Should put the tick labels closer to the clock
+                tickfont=dict(size=18),
             ),
         ),
     )
-
     return fig
 
 
