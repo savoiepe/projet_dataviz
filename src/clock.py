@@ -1,7 +1,40 @@
 import plotly.graph_objects as go
+import pandas as pd
 
 
 def get_clock(data):
+
+    data = pd.DataFrame(
+        {
+            "hour": range(24),
+            "n_post": [
+                23,
+                52,
+                244,
+                282,
+                568,
+                722,
+                790,
+                574,
+                620,
+                843,
+                944,
+                1279,
+                1716,
+                1401,
+                1062,
+                829,
+                600,
+                362,
+                156,
+                71,
+                37,
+                29,
+                16,
+                23,
+            ],
+        }
+    )
 
     max_value = max(data["n_post"])
     radial_range = [0, max_value + 5]
