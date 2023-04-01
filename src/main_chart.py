@@ -4,7 +4,7 @@
 import plotly.express as px
 import preprocess
 
-def get_figure(data, metric, group_by_column, year):
+def get_figure(data, group_by_column, metric, year):
     '''
         Function to get the figure with given metrics
 
@@ -29,7 +29,6 @@ def bar_chart(data, group_by_column, metric):
     return px.bar(data, x=group_by_column, y=metric)
 
 def treemap_chart(data, group_by_column, metric):
-
     if group_by_column == 'compte':   
         fig = px.treemap(
             data, 

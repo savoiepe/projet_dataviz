@@ -13,6 +13,8 @@ import dash
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
+from dash import ctx
+import plotly.express as px
 
 import pandas as pd
 
@@ -20,6 +22,7 @@ import preprocess
 import main_chart
 import clock
 import template
+import state
 
 
 app = dash.Dash(__name__)
@@ -36,6 +39,14 @@ template.set_default_theme()
 app.layout = html.Div(
     className="content",
     children=[
+        # Do not change this div, if you wonder why it exists, do not hesiate to ask me (Pierre-Emmanuel)
+        html.Div(
+            id = 'state_holder',
+            hidden = True,
+            title = "nbVues",
+            className = "compte",
+            accessKey= "all"
+        ),
         html.Header(
             children=[
                 html.H1(
@@ -235,6 +246,7 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                             },
+                            n_clicks = 0
                         ),
                         html.Button(
                             "Likes",
@@ -248,6 +260,7 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                             },
+                            n_clicks = 0
                         ),
                         html.Button(
                             "Commentaires",
@@ -261,10 +274,11 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                             },
+                            n_clicks = 0
                         ),
                         html.Button(
                             "Partages",
-                            id="par-btn",
+                            id="partages-btn",
                             style={
                                 "font-size": "11px",
                                 "backgroundColor": "white",
@@ -274,6 +288,7 @@ app.layout = html.Div(
                                 "height": "40px",
                                 "text-align": "center",
                             },
+                            n_clicks = 0
                         ),
                     ],
                     style={"width": "150px"},
@@ -286,9 +301,10 @@ app.layout = html.Div(
                     ]
                 ),
                 dcc.Graph(
-                    id="bubble_graph",
+                    id="main_graph",
                     className="graph",
-                    figure=main_chart.get_figure(dataframe, 'nbVues', 'tags', 'all'),
+                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
+                    figure=main_chart.get_empty_figure(),
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
@@ -305,7 +321,7 @@ app.layout = html.Div(
                     [
                         html.Button(
                             "Médias",
-                            id="media-btn",
+                            id="compte-btn",
                             style={
                                 "backgroundColor": "white",
                                 "color": "black",
@@ -316,10 +332,11 @@ app.layout = html.Div(
                                 "marginLeft": "700px",
                                 "marginBottom": "60px",
                             },
+                            n_clicks = 0
                         ),
                         html.Button(
                             "Sujets",
-                            id="sujet-btn",
+                            id="tags-btn",
                             style={
                                 "backgroundColor": "white",
                                 "color": "black",
@@ -330,6 +347,7 @@ app.layout = html.Div(
                                 "marginLeft": "20px",
                                 "marginBottom": "60px",
                             },
+                            n_clicks = 0
                         ),
                         html.Button(
                             "Durées",
@@ -344,6 +362,7 @@ app.layout = html.Div(
                                 "marginLeft": "20px",
                                 "marginBottom": "60px",
                             },
+                            n_clicks=0
                         ),
                     ]
                 ),
@@ -354,11 +373,40 @@ app.layout = html.Div(
 
 
 @app.callback(
-    Output("container-button-basic", "children"),
-    Input("submit-val", "n_clicks"),
-    State("input-on-submit", "value"),
+    Output("main_graph", "figure"),
+    Output("state_holder", "title"),
+    Output("state_holder", "className"),
+    Output("state_holder", "accessKey"),
+    Input("compte-btn", "n_clicks"),
+    Input("tags-btn", "n_clicks"),
+    Input("duree-btn", "n_clicks"),
+    Input("vues-btn", "n_clicks"),
+    Input("commentaires-btn", "n_clicks"),
+    Input("likes-btn", "n_clicks"),
+    Input("partages-btn", "n_clicks"),
+    State('state_holder', 'title'),
+    State('state_holder', 'className'),
+    State('state_holder', 'accessKey'),
+    prevent_initial_call = True
 )
-def update_output(n_clicks, value):
-    return 'The input value was "{}" and the button has been clicked {} times'.format(
-        value, n_clicks
-    )
+def update_output(c,t,d,v,co,l,p, metric, group_by_columns, year):
+    if c == t == d == v == co == l == p == 0:
+        return main_chart.get_empty_figure()
+        
+    if "compte-btn" == ctx.triggered_id:
+        group_by_columns = 'compte'
+    elif "tags-btn" == ctx.triggered_id:
+        group_by_columns = 'tags'
+    elif "duree-btn" == ctx.triggered_id:
+        group_by_columns = 'durée'
+    elif "vues-btn" == ctx.triggered_id:
+        metric = 'nbVues'
+    elif "commentaires-btn" == ctx.triggered_id:
+        metric = 'nbCommentaires'
+    elif "likes-btn" == ctx.triggered_id:
+        metric = 'nbLikes'
+    elif "partages-btn" == ctx.triggered_id:
+        metric = 'nbPartages'
+    
+    fig = main_chart.get_figure(dataframe, group_by_columns, metric, year)
+    return fig, metric, group_by_columns, year
