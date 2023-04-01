@@ -3,8 +3,6 @@ import pandas as pd
 
 
 def get_clock(data):
-    print(data)
-
     max_value = max(data["n_post"])
     radial_range = [0, max_value + 5]
 
@@ -22,7 +20,7 @@ def get_clock(data):
 
     fig.update_layout(
         title=dict(
-            text="Heure propice pour poster",
+            text="Heure propice pour publié",
             x=0.5,  # Center title
             y=0.02,  # Place title below the plot
             font=dict(

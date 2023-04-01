@@ -17,8 +17,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 import preprocess
-import heatmap
-import line_chart
+import main_chart
 import clock
 import template
 
@@ -150,7 +149,7 @@ app.layout = html.Div(
                                 html.Div(
                                     children=[
                                         html.H2(
-                                            children="Nombre de Tik Tok postés ce mois",
+                                            children="Nombre de Tik Tok publiés ce mois",
                                             style={
                                                 "color": "white",
                                                 "text-align": "center",
@@ -283,25 +282,13 @@ app.layout = html.Div(
                     children=[
                         html.Div(
                             children=[],
-                        ),
-                        dcc.Graph(
-                            id="line-chart",
-                            className="graph",
-                            figure=line_chart.get_empty_figure(),
-                            config=dict(
-                                scrollZoom=False,
-                                showTips=False,
-                                showAxisDragHandles=False,
-                                doubleClick=False,
-                                displayModeBar=False,
-                            ),
-                        ),
+                        )
                     ]
                 ),
                 dcc.Graph(
-                    id="heatmap",
+                    id="bubble_graph",
                     className="graph",
-                    figure=line_chart.get_empty_figure(),
+                    figure=main_chart.get_figure(dataframe, 'nbVues', 'tags', 'all'),
                     config=dict(
                         scrollZoom=False,
                         showTips=False,

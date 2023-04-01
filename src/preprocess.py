@@ -120,10 +120,10 @@ def bubble_graph(data, group_by_column, year = "all"):
         data = filter_by_year(data, year)
         
     if group_by_column == 'compte':
-        return pd.DataFrame(data.groupby([data[group_by_column], data['pays']], as_index=False).mean().round())
+        return pd.DataFrame(data.groupby([data[group_by_column], data['pays']], as_index=False).mean(numeric_only = True).round())
     
     if group_by_column == 'durée':
-        return pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean().round())
+        return pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean(numeric_only = True).round())
     
     if group_by_column == 'tags':
         return explode_tags(data)
