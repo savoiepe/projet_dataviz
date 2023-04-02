@@ -72,7 +72,7 @@ def get_empty_figure():
                 yaxis = { "visible": False },
                 annotations = [
                     {   
-                        "text": "Cliquer sur un des boutons à gauches pour plus d'informations",
+                        "text": "Cliquer sur un des boutons en bas pour plus d'informations",
                         "showarrow": False
                         }
                 ],

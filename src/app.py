@@ -19,10 +19,10 @@ import plotly.express as px
 import pandas as pd
 
 import preprocess
-import main_chart
+import main_graph
 import clock
 import template
-import state
+import second_graph
 
 
 app = dash.Dash(__name__)
@@ -44,7 +44,7 @@ app.layout = html.Div(
             id = 'state_holder',
             hidden = True,
             title = "nbVues",
-            className = "compte",
+            className = None,
             accessKey= "all"
         ),
         html.Header(
@@ -304,7 +304,7 @@ app.layout = html.Div(
                     id="main_graph",
                     className="graph",
                     # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
-                    figure=main_chart.get_empty_figure(),
+                    figure=main_graph.get_empty_figure(),
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
@@ -312,6 +312,26 @@ app.layout = html.Div(
                         doubleClick=False,
                         displayModeBar=False,
                     ),
+                ),
+                html.Div(
+                    children=[
+                        html.Div(
+                            children=[],
+                        )
+                    ]
+                ),
+                dcc.Graph(
+                    id="second_graph",
+                    className="graph",
+                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
+                    figure=second_graph.get_figure(dataframe, None, "all"),
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False,
+                    )
                 ),
             ],
         ),
@@ -391,7 +411,7 @@ app.layout = html.Div(
 )
 def update_output(c,t,d,v,co,l,p, metric, group_by_columns, year):
     if c == t == d == v == co == l == p == 0:
-        return main_chart.get_empty_figure()
+        return main_graph.get_empty_figure()
         
     if "compte-btn" == ctx.triggered_id:
         group_by_columns = 'compte'
@@ -408,5 +428,27 @@ def update_output(c,t,d,v,co,l,p, metric, group_by_columns, year):
     elif "partages-btn" == ctx.triggered_id:
         metric = 'nbPartages'
     
-    fig = main_chart.get_figure(dataframe, group_by_columns, metric, year)
+    fig = main_graph.get_figure(dataframe, group_by_columns, metric, year)
     return fig, metric, group_by_columns, year
+
+@app.callback(
+    Output("second_graph", "figure"),
+    Input("main_graph", "clickData"),
+    State('state_holder', 'className'),
+    State('state_holder', 'accessKey'),
+    prevent_initial_call = True
+)
+def update_output(click_data, group_by_columns, year):
+    click_label = click_data['points'][0]['label']
+    
+    if group_by_columns == 'durée':
+        return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+    
+    click_current_path = click_data['points'][0]['currentPath']
+    if click_current_path == '/':
+        return second_graph.get_figure(dataframe, None, year)
+    
+    if click_label in ['France', 'Canada', 'Belgique', 'Suisse']:
+        return second_graph.get_figure(dataframe, ['pays', click_label], year)
+
+    return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)

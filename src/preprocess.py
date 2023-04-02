@@ -103,7 +103,7 @@ def explode_tags(data):
     data_tag = data.explode('tags')
     
     # Regrouper les données par tags
-    data_tag = pd.DataFrame(data_tag.groupby([data_tag['tags']], as_index=False).agg({'nbVues':'mean', 'nbPartages':'mean','nbCommentaires':'mean','compte':'size'}).round())
+    data_tag = pd.DataFrame(data_tag.groupby([data_tag['tags']], as_index=False).agg({'nbVues':'mean','nbLikes':'mean', 'nbPartages':'mean','nbCommentaires':'mean','compte':'size'}).round())
     data_tag.rename(columns={"compte": "n_post"}, inplace = True)
     
     # Sort la liste en fonction des tags les plus courant
