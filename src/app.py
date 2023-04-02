@@ -409,7 +409,7 @@ app.layout = html.Div(
     State('state_holder', 'accessKey'),
     prevent_initial_call = True
 )
-def update_output(c,t,d,v,co,l,p, metric, group_by_columns, year):
+def update_main_graph(c,t,d,v,co,l,p, metric, group_by_columns, year):
     if c == t == d == v == co == l == p == 0:
         return main_graph.get_empty_figure()
         
@@ -438,7 +438,7 @@ def update_output(c,t,d,v,co,l,p, metric, group_by_columns, year):
     State('state_holder', 'accessKey'),
     prevent_initial_call = True
 )
-def update_output(click_data, group_by_columns, year):
+def update_second_graph(click_data, group_by_columns, year):
     click_label = click_data['points'][0]['label']
     
     if group_by_columns == 'durée':
