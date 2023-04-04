@@ -3,11 +3,11 @@
 '''
 import plotly.express as px
 import preprocess
+import hover_template
 
 def get_figure(data, group_by_column, metric, year):
     '''
         Function to get the figure with given metrics
-
         data is the complete data
         metric is the metric of magitude to use in the graph, it can be either 'nbVues', 'nbCommentaires', 'nbLikes' or 'nbPartages'
         group_by_column is the column to consider, it can be either "compte", "durée" ou "tags"
@@ -26,7 +26,11 @@ def get_figure(data, group_by_column, metric, year):
     
 
 def bar_chart(data, group_by_column, metric):
-    return px.bar(data, x=group_by_column, y=metric)
+    fig=px.bar(data, x=group_by_column, y=metric,
+           title='Répartition des tiktok selon leur durée et le nombre de ' + metric[2:])
+    fig.update_layout(title_x=0.5)
+    return fig
+
 
 def treemap_chart(data, group_by_column, metric):
     if group_by_column == 'compte':   
@@ -34,9 +38,10 @@ def treemap_chart(data, group_by_column, metric):
             data, 
             path=[px.Constant("Graph title"), "pays", group_by_column], 
             values = metric,
+            title='Répartition des médias selon le nombre de ' + metric[2:] 
         )
         fig.update_traces(root_color="lightgrey")
-        fig.update_layout(margin = dict(t=50, l=25, r=25, b=25))
+        fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
         return fig
 
     if group_by_column == 'tags':
@@ -44,19 +49,18 @@ def treemap_chart(data, group_by_column, metric):
             data, 
             path=[px.Constant("Graph title"), group_by_column], 
             values = metric,
+            title='Répartition des sujets selon le nombre de ' + metric[2:]
         )
         fig.update_traces(root_color="lightgrey")
-        fig.update_layout(margin = dict(t=50, l=25, r=25, b=25))
+        fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
         return fig
 
 
 def get_empty_figure():
     '''
         Returns the figure to display when there is no data to show.
-
         The text to display is : 'No data to display. Select a cell
         in the heatmap for more information.
-
     '''
 
     # TODO : Construct the empty figure to display. Make sure to 
