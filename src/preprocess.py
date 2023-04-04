@@ -123,7 +123,11 @@ def bubble_graph(data, group_by_column, year = "all"):
         return pd.DataFrame(data.groupby([data[group_by_column], data['pays']], as_index=False).mean(numeric_only = True).round())
     
     if group_by_column == 'durée':
-        return pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean(numeric_only = True).round())
+        df = pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean().round())
+        for d in ['<60.0','<120.0', '<180.0', '<240.0']:
+            if d not in df['durée'].unique():
+                df = pd.concat([df, pd.DataFrame([[d,0,0,0,0]],columns = ['durée','nbCommentaires','nbLikes','nbVues','nbPartages'])])
+        return df
     
     if group_by_column == 'tags':
         return explode_tags(data)

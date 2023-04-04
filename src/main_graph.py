@@ -66,8 +66,8 @@ def get_empty_figure():
     fig.update_yaxes(range = [0,1])
     fig.update_layout(
                 {
-    'paper_bgcolor': 'rgba(0,0,0,0)',
-    'plot_bgcolor': 'rgba(0,0,0,0)'},
+                'paper_bgcolor': 'rgba(0,0,0,0)',
+                'plot_bgcolor': 'rgba(0,0,0,0)'},
                 xaxis =  {"visible": False },
                 yaxis = { "visible": False },
                 annotations = [
