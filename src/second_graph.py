@@ -18,6 +18,10 @@ def get_figure(data, selected, year):
 
     fig = px.line(data_to_display, x="date_str", y="n_post")
 
+    fig.update_traces(
+        hovertemplate="<b>Date:</b> %{x}<br><b>Nombre de posts:</b> %{y}<extra></extra>"
+    )
+
     fig.update_xaxes(
         title="",
         showticklabels=True,
