@@ -20,7 +20,7 @@ def get_clock(data):
 
     fig.update_layout(
         title=dict(
-            text="Heure propice pour publié",
+            text="Heure propice pour publier",
             x=0.5,  # Center title
             y=0.02,  # Place title below the plot
             font=dict(
