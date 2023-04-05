@@ -98,11 +98,12 @@ def add_covid_info(fig):
         yref="paper",
         line=dict(color="green", width=2, dash="dash"),
     )
+
     # Legend of the COVID lines
     fig.add_shape(
         type="rect",
-        x0=0.05,
-        x1=0.28,
+        x0=0.02,
+        x1=0.25,
         xref="paper",
         y0=0.82,
         y1=0.95,
@@ -110,10 +111,11 @@ def add_covid_info(fig):
         fillcolor="white",
         line=dict(color="black", width=1),
     )
+
     fig.add_shape(
         type="line",
-        x0=0.06,
-        x1=0.12,
+        x0=0.03,
+        x1=0.09,
         xref="paper",
         y0=0.91,
         y1=0.91,
@@ -122,13 +124,13 @@ def add_covid_info(fig):
     )
 
     fig.add_annotation(
-        text="Début COVID", xref="paper", yref="paper", x=0.12, y=0.94, showarrow=False
+        text="Début COVID", xref="paper", yref="paper", x=0.09, y=0.94, showarrow=False
     )
 
     fig.add_shape(
         type="line",
-        x0=0.06,
-        x1=0.12,
+        x0=0.03,
+        x1=0.09,
         xref="paper",
         y0=0.85,
         y1=0.85,
@@ -137,7 +139,7 @@ def add_covid_info(fig):
     )
 
     fig.add_annotation(
-        text="Fin COVID", xref="paper", yref="paper", x=0.12, y=0.88, showarrow=False
+        text="Fin COVID", xref="paper", yref="paper", x=0.09, y=0.88, showarrow=False
     )
 
     return fig
