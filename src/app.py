@@ -43,9 +43,28 @@ app.layout = html.Div(
         html.Div(
             id = 'state_holder',
             hidden = True,
-            title = "nbVues",
-            className = None,
-            accessKey= "all"
+            children=[
+                html.Div(
+                    id='metric_state',
+                    key = 'nbVues'
+                ),
+                html.Div(
+                    id='year_state',
+                    key = '2019-2022'
+                ),
+                html.Div(
+                    id='group_state',
+                    key = None
+                ),
+                html.Div(
+                    id='selected_state_1',
+                    key = None
+                ),
+                html.Div(
+                    id='selected_state_2',
+                    key = None
+                )
+            ]
         ),
         html.Header(
             children=[
@@ -296,44 +315,60 @@ app.layout = html.Div(
                 html.Div(
                     children=[
                         html.Div(
-                            children=[],
+                            children=[
+    
+                                dcc.Graph(
+                                    id="main_graph",
+                                    className="graph",
+                                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
+                                    figure=main_graph.get_empty_figure(),
+                                    config=dict(
+                                        scrollZoom=False,
+                                        showTips=False,
+                                        showAxisDragHandles=False,
+                                        doubleClick=False,
+                                        displayModeBar=False,
+                                    ),
+                                ),
+
+                            ],
                         )
                     ]
-                ),
-                dcc.Graph(
-                    id="main_graph",
-                    className="graph",
-                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
-                    figure=main_graph.get_empty_figure(),
-                    config=dict(
-                        scrollZoom=False,
-                        showTips=False,
-                        showAxisDragHandles=False,
-                        doubleClick=False,
-                        displayModeBar=False,
-                    ),
                 ),
                 html.Div(
                     children=[
                         html.Div(
-                            children=[],
+                            children=[
+                    
+                                dcc.Graph(
+                                    id="second_graph",
+                                    className="graph",
+                                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
+                                    figure=second_graph.get_figure(dataframe, None, "all"),
+                                    config=dict(
+                                        scrollZoom=False,
+                                        showTips=False,
+                                        showAxisDragHandles=False,
+                                        doubleClick=False,
+                                        displayModeBar=False,
+                                    )
+                                ),
+                            ],
                         )
                     ]
                 ),
-                dcc.Graph(
-                    id="second_graph",
-                    className="graph",
-                    # figure=main_chart.get_figure(dataframe, group_by_columns, metric, year),
-                    figure=second_graph.get_figure(dataframe, None, "all"),
-                    config=dict(
-                        scrollZoom=False,
-                        showTips=False,
-                        showAxisDragHandles=False,
-                        doubleClick=False,
-                        displayModeBar=False,
-                    )
-                ),
             ],
+        ),
+        dcc.RangeSlider(2019, 2022,
+            id = 'year_slider',
+            step=1,
+            value=[2019, 2022],
+            marks = {
+                2019:2019,
+                2020:2020,
+                2021:2021,
+                2022:2022
+            }
         ),
         html.Footer(
             children=[
@@ -394,9 +429,9 @@ app.layout = html.Div(
 
 @app.callback(
     Output("main_graph", "figure"),
-    Output("state_holder", "title"),
-    Output("state_holder", "className"),
-    Output("state_holder", "accessKey"),
+    Output("metric_state", "key"),
+    Output("group_state", "key"),
+    Output("year_state", "key"),
     Input("compte-btn", "n_clicks"),
     Input("tags-btn", "n_clicks"),
     Input("duree-btn", "n_clicks"),
@@ -404,15 +439,13 @@ app.layout = html.Div(
     Input("commentaires-btn", "n_clicks"),
     Input("likes-btn", "n_clicks"),
     Input("partages-btn", "n_clicks"),
-    State('state_holder', 'title'),
-    State('state_holder', 'className'),
-    State('state_holder', 'accessKey'),
+    Input("year_slider", "value"),
+    State('metric_state', 'key'),
+    State('group_state', 'key'),
+    State('year_state', 'key'),
     prevent_initial_call = True
 )
-def update_main_graph(c,t,d,v,co,l,p, metric, group_by_columns, year):
-    if c == t == d == v == co == l == p == 0:
-        return main_graph.get_empty_figure()
-        
+def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year):
     if "compte-btn" == ctx.triggered_id:
         group_by_columns = 'compte'
     elif "tags-btn" == ctx.triggered_id:
@@ -427,28 +460,35 @@ def update_main_graph(c,t,d,v,co,l,p, metric, group_by_columns, year):
         metric = 'nbLikes'
     elif "partages-btn" == ctx.triggered_id:
         metric = 'nbPartages'
-    
+    elif "year_slider" == ctx.triggered_id:
+        year = str(year_value[0]) + "-" +str(year_value[1])
+
     fig = main_graph.get_figure(dataframe, group_by_columns, metric, year)
     return fig, metric, group_by_columns, year
 
 @app.callback(
     Output("second_graph", "figure"),
     Input("main_graph", "clickData"),
-    State('state_holder', 'className'),
-    State('state_holder', 'accessKey'),
+    Input('year_state', 'key'),
+    State('group_state', 'key'),
     prevent_initial_call = True
 )
-def update_second_graph(click_data, group_by_columns, year):
-    click_label = click_data['points'][0]['label']
-    
-    if group_by_columns == 'durée':
-        return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
-    
-    click_current_path = click_data['points'][0]['currentPath']
-    if click_current_path == '/':
-        return second_graph.get_figure(dataframe, None, year)
-    
-    if click_label in ['France', 'Canada', 'Belgique', 'Suisse']:
-        return second_graph.get_figure(dataframe, ['pays', click_label], year)
+def update_second_graph(click_data, year, group_by_columns):
+    # If the callback is triggered by a click to the main graph
+    if click_data is not None : 
+        click_label = click_data['points'][0]['label']
+        
+        if group_by_columns == 'durée':
+            return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+        
+        click_current_path = click_data['points'][0]['currentPath']
+        if click_current_path == '/':
+            return second_graph.get_figure(dataframe, None, year)
+        
+        if click_label in ['France', 'Canada', 'Belgique', 'Suisse']:
+            return second_graph.get_figure(dataframe, ['pays', click_label], year)
 
-    return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+        return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+
+    # If the callback is triggered by a change of dates
+    return second_graph.get_figure(dataframe, None, year)

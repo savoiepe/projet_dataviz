@@ -94,8 +94,10 @@ def preprocess_initial(data):
 ######################################################
 
 def filter_by_year(data, year):
-    assert year in [2019,2020,2021,2022], "Incorrect year"
-    return data[(data['date'] >= datetime.date(year,1,1)) & (data['date'] <= datetime.date(year,12,31))]
+    min_year, max_year = year.split('-')
+    assert int(min_year) in [2019,2020,2021,2022], "Incorrect first year"
+    assert int(min_year) in [2019,2020,2021,2022], "Incorrect second year"
+    return data[(data['date'] >= datetime.date(int(min_year),1,1)) & (data['date'] <= datetime.date(int(max_year),12,31))]
 
 # Transformation des données pour le graphique à bulle en fonction des tags
 def explode_tags(data):
@@ -123,7 +125,7 @@ def bubble_graph(data, group_by_column, year = "all"):
         return pd.DataFrame(data.groupby([data[group_by_column], data['pays']], as_index=False).mean(numeric_only = True).round())
     
     if group_by_column == 'durée':
-        df = pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean().round())
+        df = pd.DataFrame(data.groupby([data[group_by_column]], as_index=False).mean(numeric_only = True).round())
         for d in ['<60.0','<120.0', '<180.0', '<240.0']:
             if d not in df['durée'].unique():
                 df = pd.concat([df, pd.DataFrame([[d,0,0,0,0]],columns = ['durée','nbCommentaires','nbLikes','nbVues','nbPartages'])])

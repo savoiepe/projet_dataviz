@@ -3,7 +3,6 @@
 '''
 import plotly.express as px
 import preprocess
-import hover_template
 
 def get_figure(data, group_by_column, metric, year):
     '''
