@@ -32,7 +32,6 @@ dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
 preprocess.preprocess_initial(dataframe)
 data_pie = preprocess.pie_chart(dataframe)
 
-
 template.create_custom_theme()
 template.set_default_theme()
 
