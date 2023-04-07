@@ -37,8 +37,17 @@ template.set_default_theme()
 
 app.layout = html.Div(
     className="content",
+        style={
+        'position': 'fixed',
+        'top': 0,
+        'left': 0,
+        'right': 0,
+        'bottom': 0,
+        #'overflow': 'scroll',  # enable scrolling
+        'aspect-ratio': '16 / 9'
+    },
     children=[
-        # Do not change this div, if you wonder why it exists, do not hesiate to ask me (Pierre-Emmanuel)
+        # Do not change this div, if you wonder why it exists, do not hesitate to ask me (Pierre-Emmanuel)
         html.Div(
             id = 'state_holder',
             hidden = True,
@@ -70,9 +79,9 @@ app.layout = html.Div(
                 html.H1(
                     "L'utilisation de Tiktok par les médias francophones",
                     style={
-                        "text-align": "left",
-                        "margin-top": "1px",
-                        "margin-bottom": "17px",
+                        'position':'fixed',
+                        'top':'20px',
+                        'left':'20px',
                         "font-family": "Perpetua Titling MT Bold",
                         "font-size": "45px",
                     },
@@ -219,32 +228,43 @@ app.layout = html.Div(
                                 "width": "25%",
                             },
                         ),
-                        html.Div(
-                            className="clock",
-                            children=[
-                                dcc.Graph(
-                                    id="clock",
-                                    className="graph",
-                                    figure=clock.get_clock(data_pie),
-                                    config=dict(
-                                        scrollZoom=False,
-                                        showTips=False,
-                                        showAxisDragHandles=False,
-                                        doubleClick=False,
-                                        displayModeBar=False,
-                                    ),
-                                )
-                            ],
-                        ),
+                     
                     ],
                     style={
                         "display": "flex",
                         "align-items": "center",
-                        "justify-content": "center",
+                        "justify-content": "left",
                         "position": "relative",
-                        "top": "30px",
+                        "top": "20px",
+                        "margin-top": "80px",
                     },
                 ),
+                html.Div(
+                    children=[
+                        dcc.Graph(
+                            id="clock",
+                            className="graph",
+                            figure=clock.get_clock(data_pie),
+                            config=dict(
+                                scrollZoom=False,
+                                showTips=False,
+                                showAxisDragHandles=False,
+                                doubleClick=False,
+                                displayModeBar=False,
+                            ),
+                        ),
+                    ],
+                   style={
+                        'position': 'fixed',
+                        'right': '30px',
+                        'bottom': '800px',
+                        'width': '290px',
+                        'height': '290px',
+                        'padding': '0px',
+                        'margin': '0px',
+                        'border': 'none',
+                    }
+                )
             ]
         ),
         html.Main(

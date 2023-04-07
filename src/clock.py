@@ -22,14 +22,14 @@ def get_clock(data):
         title=dict(
             text="Heure propice pour publier",
             x=0.5,  # Center title
-            y=0.02,  # Place title below the plot
+            y=0.2,  # Place title below the plot
             font=dict(
-                size=20,
+                size=15,
                 color="black",
             ),
         ),
         polar=dict(
-            bgcolor="rgba(0,0,0,0)",  # Remove grey background
+            #bgcolor="rgba(0,0,0,0)",  # Remove grey background
             radialaxis=dict(
                 visible=True,
                 range=radial_range,
@@ -47,5 +47,7 @@ def get_clock(data):
                 tickfont=dict(size=18),
             ),
         ),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)"
     )
     return fig
