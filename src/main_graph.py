@@ -28,6 +28,7 @@ def bar_chart(data, group_by_column, metric):
     fig=px.bar(data, x=group_by_column, y=metric,
            title='Répartition des tiktok selon leur durée et le nombre de ' + metric[2:])
     fig.update_layout(title_x=0.5)
+    fig.update_traces(marker_color='rgb(50, 141, 207)')
     return fig
 
 
@@ -37,9 +38,11 @@ def treemap_chart(data, group_by_column, metric):
             data, 
             path=[px.Constant("Graph title"), "pays", group_by_column], 
             values = metric,
-            title='Répartition des médias selon le nombre de ' + metric[2:] 
+            title='Répartition des médias selon le nombre de ' + metric[2:],
+            color='pays',
+            color_discrete_map={"(?)":"lightgrey", "France":"rgb(0, 38, 84)", "Canada":"rgb(216, 6, 33)", 
+                                "Suisse":"rgb(6, 122, 39)","Belgique":"rgb(255, 205, 0)"} 
         )
-        fig.update_traces(root_color="lightgrey")
         fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
         return fig
 
@@ -48,9 +51,11 @@ def treemap_chart(data, group_by_column, metric):
             data, 
             path=[px.Constant("Graph title"), group_by_column], 
             values = metric,
-            title='Répartition des sujets selon le nombre de ' + metric[2:]
+            title='Répartition des sujets selon le nombre de ' + metric[2:],
+            color='tags',
+            color_discrete_sequence=px.colors.sequential.ice,
+            color_discrete_map={"(?)":"lightgrey"}
         )
-        fig.update_traces(root_color="lightgrey")
         fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
         return fig
 
