@@ -58,25 +58,28 @@ def get_figure(data, selected, year):
     )
 
     fig = add_covid_info(fig)
-
+    #Affichage des titres et definition des couleurs des graphiques de droite
     if selected is None:
-        fig.update_layout(
-            title="Nombre de tiktok postés entre 2019 et 2022", title_x=0.5
-        )
+        fig.update_layout(title='Nombre de tiktok posté entre 2019 et 2022',title_x=0.5)
+        fig.update_traces(line_color='rgb(50, 141, 207)')
         return fig
-    if selected[0] == "durée":
-        fig.update_layout(
-            title="Nombre de tiktoks postés de durée " + selected[1] + " secondes"
-        )
-    elif selected[0] == "tags":
-        fig.update_layout(
-            title="Nombre de tiktoks postés ayant pour sujet " + "'" + selected[1] + "'"
-        )
-    elif selected[0] == "compte":
-        fig.update_layout(title="Nombre de tiktoks postés par le média " + selected[1])
-
+    if selected[0]=='durée':
+        fig.update_layout(title='Nombre de tiktoks posté de durée '+ selected[1] + ' secondes')
+        fig.update_traces(line_color='rgb(50, 141, 207)')
+    elif selected[0]=='tags':
+        fig.update_layout(title='Nombre de tiktoks posté ayant pour sujet '+ "'" + selected[1] + "'")
+        fig.update_traces(line_color='rgb(50, 141, 207)')
+    elif selected[0]=='compte':
+        fig.update_layout(title='Nombre de tiktoks posté par le média '+ selected[1])
+        fig.update_traces(line_color='rgb(50, 141, 207)')
+    elif selected[0]=='pays':
+        if selected[1]=='Canada':
+            fig.update_layout(title='Nombre de tiktoks posté par les médias du '+ selected[1])
+        else:
+            fig.update_layout(title='Nombre de tiktoks posté par les médias de '+ selected[1])
+        fig.update_traces(line_color='rgb(50, 141, 207)')       
     fig.update_layout(title_x=0.5)
-    return fig
+    return fig 
 
 
 def add_covid_info(fig):
