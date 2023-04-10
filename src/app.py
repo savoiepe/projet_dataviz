@@ -277,7 +277,7 @@ app.layout = html.Div(
                             id="vues-btn",
                             style={
                                 "font-size": "11px",
-                                "backgroundColor": "white",
+                                "backgroundColor": "LightSkyBlue",
                                 "color": "black",
                                 "width": "140px",
                                 "border": "1.5px black solid",
@@ -451,6 +451,13 @@ app.layout = html.Div(
     Output("metric_state", "key"),
     Output("group_state", "key"),
     Output("year_state", "key"),
+    Output("compte-btn", "style"),
+    Output("tags-btn", "style"),
+    Output("duree-btn", "style"),
+    Output("vues-btn", "style"),
+    Output("commentaires-btn", "style"),
+    Output("likes-btn", "style"),
+    Output("partages-btn", "style"),   
     Input("compte-btn", "n_clicks"),
     Input("tags-btn", "n_clicks"),
     Input("duree-btn", "n_clicks"),
@@ -462,28 +469,60 @@ app.layout = html.Div(
     State('metric_state', 'key'),
     State('group_state', 'key'),
     State('year_state', 'key'),
+    State("compte-btn", "style"),
+    State("tags-btn", "style"),
+    State("duree-btn", "style"),
+    State("vues-btn", "style"),
+    State("commentaires-btn", "style"),
+    State("likes-btn", "style"),
+    State("partages-btn", "style"),   
     prevent_initial_call = True
 )
-def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year):
+def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year, compte_style, tags_style, duree_style, vues_style, comm_style, likes_style, partages_style):
     if "compte-btn" == ctx.triggered_id:
         group_by_columns = 'compte'
+        compte_style['backgroundColor'] = 'LightSkyBlue'
+        tags_style['backgroundColor'] = 'white'
+        duree_style['backgroundColor'] = 'white'
     elif "tags-btn" == ctx.triggered_id:
         group_by_columns = 'tags'
+        compte_style['backgroundColor'] = 'white'
+        tags_style['backgroundColor'] = 'LightSkyBlue'
+        duree_style['backgroundColor'] = 'white'
     elif "duree-btn" == ctx.triggered_id:
         group_by_columns = 'durée'
+        compte_style['backgroundColor'] = 'white'
+        tags_style['backgroundColor'] = 'white'
+        duree_style['backgroundColor'] = 'LightSkyBlue'
     elif "vues-btn" == ctx.triggered_id:
         metric = 'nbVues'
+        vues_style['backgroundColor'] = 'LightSkyBlue'
+        comm_style['backgroundColor'] = 'white'
+        likes_style['backgroundColor'] = 'white'
+        partages_style['backgroundColor'] = 'white'
     elif "commentaires-btn" == ctx.triggered_id:
         metric = 'nbCommentaires'
+        vues_style['backgroundColor'] = 'white'
+        comm_style['backgroundColor'] = 'LightSkyBlue'
+        likes_style['backgroundColor'] = 'white'
+        partages_style['backgroundColor'] = 'white'
     elif "likes-btn" == ctx.triggered_id:
         metric = 'nbLikes'
+        vues_style['backgroundColor'] = 'white'
+        comm_style['backgroundColor'] = 'white'
+        likes_style['backgroundColor'] = 'LightSkyBlue'
+        partages_style['backgroundColor'] = 'white'
     elif "partages-btn" == ctx.triggered_id:
         metric = 'nbPartages'
+        vues_style['backgroundColor'] = 'white'
+        comm_style['backgroundColor'] = 'white'
+        likes_style['backgroundColor'] = 'white'
+        partages_style['backgroundColor'] = 'LightSkyBlue'
     elif "year_slider" == ctx.triggered_id:
         year = str(year_value[0]) + "-" +str(year_value[1])
 
     fig = main_graph.get_figure(dataframe, group_by_columns, metric, year)
-    return fig, metric, group_by_columns, year
+    return fig, metric, group_by_columns, year, compte_style, tags_style, duree_style, vues_style, comm_style, likes_style, partages_style
 
 @app.callback(
     Output("second_graph", "figure"),
