@@ -22,7 +22,7 @@ def get_clock(data):
         title=dict(
             text="Heure propice pour publier",
             x=0.5,  # Center title
-            y=0.2,  # Place title below the plot
+            y=0.7,  # Place title below the plot
             font=dict(
                 size=15,
                 color="black",
@@ -44,7 +44,7 @@ def get_clock(data):
                 rotation=90,
                 direction="clockwise",
                 ticklen=80,  # Should put the tick labels closer to the clock
-                tickfont=dict(size=18),
+                tickfont=dict(size=10),
             ),
         ),
         plot_bgcolor="rgba(0,0,0,0)",

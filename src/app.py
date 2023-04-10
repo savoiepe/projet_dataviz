@@ -43,8 +43,7 @@ app.layout = html.Div(
         'left': 0,
         'right': 0,
         'bottom': 0,
-        #'overflow': 'scroll',  # enable scrolling
-        'aspect-ratio': '16 / 9'
+        'aspect-ratio': '16 / 9',
     },
     children=[
         # Do not change this div, if you wonder why it exists, do not hesitate to ask me (Pierre-Emmanuel)
@@ -258,11 +257,12 @@ app.layout = html.Div(
                         'position': 'fixed',
                         'right': '30px',
                         'bottom': '800px',
-                        'width': '290px',
-                        'height': '290px',
+                        'width': '275px',
+                        'height': '275px',
                         'padding': '0px',
                         'margin': '0px',
                         'border': 'none',
+                        'aspect-ratio':'16/9'
                     }
                 )
             ]
@@ -399,11 +399,11 @@ app.layout = html.Div(
                             style={
                                 "backgroundColor": "white",
                                 "color": "black",
-                                "width": "100px",
+                                "width": "120px",
                                 "border": "1.5px black solid",
                                 "height": "40px",
                                 "text-align": "center",
-                                "marginLeft": "700px",
+                                "marginLeft": "410px",
                                 "marginBottom": "60px",
                             },
                             n_clicks = 0
@@ -414,7 +414,7 @@ app.layout = html.Div(
                             style={
                                 "backgroundColor": "white",
                                 "color": "black",
-                                "width": "100px",
+                                "width": "120px",
                                 "border": "1.5px black solid",
                                 "height": "40px",
                                 "text-align": "center",
@@ -429,7 +429,7 @@ app.layout = html.Div(
                             style={
                                 "backgroundColor": "white",
                                 "color": "black",
-                                "width": "100px",
+                                "width": "120px",
                                 "border": "1.5px black solid",
                                 "height": "40px",
                                 "text-align": "center",
@@ -457,7 +457,7 @@ app.layout = html.Div(
     Input("vues-btn", "n_clicks"),
     Input("commentaires-btn", "n_clicks"),
     Input("likes-btn", "n_clicks"),
-    Input("partages-btn", "n_clicks"),
+    Input("partages-btn", "n_clicks"),    
     Input("year_slider", "value"),
     State('metric_state', 'key'),
     State('group_state', 'key'),
