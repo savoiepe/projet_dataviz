@@ -378,17 +378,25 @@ app.layout = html.Div(
                 ),
             ],
         ),
-        dcc.RangeSlider(2019, 2022,
-            id = 'year_slider',
-            step=1,
-            value=[2019, 2022],
-            marks = {
-                2019:2019,
-                2020:2020,
-                2021:2021,
-                2022:2022
+        html.Div(
+            dcc.RangeSlider(2019, 2022,
+                id = 'year_slider',
+                step=1,
+                value=[2019, 2022],
+                marks = {
+                    2019:2019,
+                    2020:2020,
+                    2021:2021,
+                    2022:2022
+                },
+            ),style={
+                'position': 'absolute',
+                'left': '12%',
+                'right': '44%',
+                'top':'85%'
             }
         ),
+        
         html.Footer(
             children=[
                 html.Div(

@@ -79,3 +79,16 @@ button:hover, button:active {
     height: 75%;
     margin: 10px;
 }
+
+.custom-range-slider .rc-slider-handle {
+    width: 24px;
+    height: 24px;
+    margin-top: -10px;
+}
+
+.custom-range-slider .rc-slider-dot {
+    width: 12px;
+    height: 12px;
+    margin-top: -5px;
+}
+
