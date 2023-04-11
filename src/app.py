@@ -256,7 +256,7 @@ app.layout = html.Div(
                    style={
                         'position': 'fixed',
                         'right': '30px',
-                        'bottom': '800px',
+                        'bottom': '82%',
                         'width': '275px',
                         'height': '275px',
                         'padding': '0px',
@@ -277,8 +277,9 @@ app.layout = html.Div(
                             id="vues-btn",
                             style={
                                 "font-size": "11px",
-                                "backgroundColor": "LightSkyBlue",
-                                "color": "black",
+                                "backgroundColor": "rgb(22 78 99)",
+                                "color": "white",
+                                'fontWeight': 'bold',
                                 "width": "140px",
                                 "border": "1.5px black solid",
                                 "height": "40px",
@@ -378,17 +379,25 @@ app.layout = html.Div(
                 ),
             ],
         ),
-        dcc.RangeSlider(2019, 2022,
-            id = 'year_slider',
-            step=1,
-            value=[2019, 2022],
-            marks = {
-                2019:2019,
-                2020:2020,
-                2021:2021,
-                2022:2022
+        html.Div(
+            dcc.RangeSlider(2019, 2022,
+                id = 'year_slider',
+                step=1,
+                value=[2019, 2022],
+                marks = {
+                    2019:2019,
+                    2020:2020,
+                    2021:2021,
+                    2022:2022
+                },
+            ),style={
+                'position': 'absolute',
+                'left': '12%',
+                'right': '44%',
+                'top':'85%'
             }
         ),
+        
         html.Footer(
             children=[
                 html.Div(
@@ -481,43 +490,109 @@ app.layout = html.Div(
 def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year, compte_style, tags_style, duree_style, vues_style, comm_style, likes_style, partages_style):
     if "compte-btn" == ctx.triggered_id:
         group_by_columns = 'compte'
-        compte_style['backgroundColor'] = 'LightSkyBlue'
+        compte_style['backgroundColor'] = "rgb(22 78 99)"
         tags_style['backgroundColor'] = 'white'
         duree_style['backgroundColor'] = 'white'
+        
+        compte_style['color'] = 'white'
+        tags_style['color'] = 'black'
+        duree_style['color'] = 'black'
+        
+        compte_style['fontWeight'] = 'bold'
+        tags_style['fontWeight'] = ''
+        duree_style['fontWeight'] = ''
     elif "tags-btn" == ctx.triggered_id:
         group_by_columns = 'tags'
         compte_style['backgroundColor'] = 'white'
-        tags_style['backgroundColor'] = 'LightSkyBlue'
+        tags_style['backgroundColor'] = "rgb(22 78 99)"
         duree_style['backgroundColor'] = 'white'
+        
+        compte_style['color'] = 'black'
+        tags_style['color'] = 'white'
+        duree_style['color'] = 'black'
+        
+        compte_style['fontWeight'] = ''
+        tags_style['fontWeight'] = 'bold'
+        duree_style['fontWeight'] = ''
+        
     elif "duree-btn" == ctx.triggered_id:
         group_by_columns = 'durée'
         compte_style['backgroundColor'] = 'white'
         tags_style['backgroundColor'] = 'white'
-        duree_style['backgroundColor'] = 'LightSkyBlue'
+        duree_style['backgroundColor'] = "rgb(22 78 99)"
+        
+        compte_style['color'] = 'black'
+        tags_style['color'] = 'black'
+        duree_style['color'] = 'white'
+        
+        compte_style['fontWeight'] = ''
+        tags_style['fontWeight'] = ''
+        duree_style['fontWeight'] = 'bold'
+        
     elif "vues-btn" == ctx.triggered_id:
         metric = 'nbVues'
-        vues_style['backgroundColor'] = 'LightSkyBlue'
+        vues_style['backgroundColor'] = "rgb(22 78 99)"
         comm_style['backgroundColor'] = 'white'
         likes_style['backgroundColor'] = 'white'
         partages_style['backgroundColor'] = 'white'
+        
+        vues_style['color'] = "white"
+        comm_style['color'] = 'black'
+        likes_style['color'] = 'black'
+        partages_style['color'] = 'black'
+        
+        vues_style['fontWeight'] = "bold"
+        comm_style['fontWeight'] = ''
+        likes_style['fontWeight'] = ''
+        partages_style['fontWeight'] = ''
     elif "commentaires-btn" == ctx.triggered_id:
         metric = 'nbCommentaires'
         vues_style['backgroundColor'] = 'white'
-        comm_style['backgroundColor'] = 'LightSkyBlue'
+        comm_style['backgroundColor'] = "rgb(22 78 99)"
         likes_style['backgroundColor'] = 'white'
         partages_style['backgroundColor'] = 'white'
+        
+        vues_style['color'] = "black"
+        comm_style['color'] = 'white'
+        likes_style['color'] = 'black'
+        partages_style['color'] = 'black'
+        
+        vues_style['fontWeight'] = ""
+        comm_style['fontWeight'] = 'bold'
+        likes_style['fontWeight'] = ''
+        partages_style['fontWeight'] = ''
     elif "likes-btn" == ctx.triggered_id:
         metric = 'nbLikes'
         vues_style['backgroundColor'] = 'white'
         comm_style['backgroundColor'] = 'white'
-        likes_style['backgroundColor'] = 'LightSkyBlue'
+        likes_style['backgroundColor'] = "rgb(22 78 99)"
         partages_style['backgroundColor'] = 'white'
+        
+        vues_style['color'] = "black"
+        comm_style['color'] = 'black'
+        likes_style['color'] = 'white'
+        partages_style['color'] = 'black'
+        
+        vues_style['fontWeight'] = ""
+        comm_style['fontWeight'] = ''
+        likes_style['fontWeight'] = 'bold'
+        partages_style['fontWeight'] = ''
     elif "partages-btn" == ctx.triggered_id:
         metric = 'nbPartages'
         vues_style['backgroundColor'] = 'white'
         comm_style['backgroundColor'] = 'white'
         likes_style['backgroundColor'] = 'white'
-        partages_style['backgroundColor'] = 'LightSkyBlue'
+        partages_style['backgroundColor'] = "rgb(22 78 99)"
+        
+        vues_style['color'] = "black"
+        comm_style['color'] = 'black'
+        likes_style['color'] = 'black'
+        partages_style['color'] = 'white'
+        
+        vues_style['fontWeight'] = ""
+        comm_style['fontWeight'] = ''
+        likes_style['fontWeight'] = ''
+        partages_style['fontWeight'] = 'bold'
     elif "year_slider" == ctx.triggered_id:
         year = str(year_value[0]) + "-" +str(year_value[1])
 
