@@ -12,9 +12,10 @@ def get_clock(data):
             theta=data["hour"] * 15,  # each sector is 360/24=15 degrees
             marker=dict(
                 color=data["n_post"],
-                colorscale="Blues",  # Set a blue color (must be modified)
+                colorscale="Blues",
             ),
             width=15,
+            hoverinfo="skip",
         )
     )
 
@@ -29,7 +30,7 @@ def get_clock(data):
             ),
         ),
         polar=dict(
-            #bgcolor="rgba(0,0,0,0)",  # Remove grey background
+            # bgcolor="rgba(0,0,0,0)",  # Remove grey background
             radialaxis=dict(
                 visible=True,
                 range=radial_range,
@@ -48,6 +49,7 @@ def get_clock(data):
             ),
         ),
         plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)"
+        paper_bgcolor="rgba(0,0,0,0)",
     )
+
     return fig
