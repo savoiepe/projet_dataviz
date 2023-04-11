@@ -256,7 +256,7 @@ app.layout = html.Div(
                    style={
                         'position': 'fixed',
                         'right': '30px',
-                        'bottom': '800px',
+                        'bottom': '82%',
                         'width': '275px',
                         'height': '275px',
                         'padding': '0px',
