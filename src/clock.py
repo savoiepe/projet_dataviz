@@ -18,7 +18,6 @@ def get_clock(data):
             hoverinfo="skip",
         )
     )
-
     fig.update_layout(
         title=dict(
             text="Heure propice pour publier",
@@ -30,7 +29,6 @@ def get_clock(data):
             ),
         ),
         polar=dict(
-            # bgcolor="rgba(0,0,0,0)",  # Remove grey background
             radialaxis=dict(
                 visible=True,
                 range=radial_range,
