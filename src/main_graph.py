@@ -53,7 +53,7 @@ def treemap_chart(data, group_by_column, metric):
             values = metric,
             title='Répartition des sujets selon le nombre de ' + metric[2:],
             color='tags',
-            color_discrete_sequence=px.colors.sequential.ice,
+            color_discrete_sequence=["rgb(50, 141, 207)"],
             color_discrete_map={"(?)":"lightgrey"}
         )
         fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
