@@ -29,6 +29,7 @@ def bar_chart(data, group_by_column, metric):
            title='Répartition des tiktok selon leur durée et le nombre de ' + metric[2:])
     fig.update_layout(title_x=0.5)
     fig.update_traces(marker_color='rgb(50, 141, 207)')
+    fig.update_layout(xaxis={'categoryorder':'array', 'categoryarray':['<60','<60.0', '<120.0', '<180.0','<240.0','<300.0','<360.0','<420.0','<480.0','<540.0','<600.0']})
     return fig
 
 
@@ -36,7 +37,7 @@ def treemap_chart(data, group_by_column, metric):
     if group_by_column == 'compte':   
         fig = px.treemap(
             data, 
-            path=[px.Constant("Graph title"), "pays", group_by_column], 
+            path=[px.Constant("Tous les pays francophones: Belgique, Canada, France, Suisse"), "pays", group_by_column], 
             values = metric,
             title='Répartition des médias selon le nombre de ' + metric[2:],
             color='pays',
@@ -49,7 +50,7 @@ def treemap_chart(data, group_by_column, metric):
     if group_by_column == 'tags':
         fig = px.treemap(
             data, 
-            path=[px.Constant("Graph title"), group_by_column], 
+            path=[px.Constant("Tous les sujets"), group_by_column], 
             values = metric,
             title='Répartition des sujets selon le nombre de ' + metric[2:],
             color='tags',
