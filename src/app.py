@@ -513,8 +513,7 @@ def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year,
         
         compte_style['fontWeight'] = ''
         tags_style['fontWeight'] = 'bold'
-        duree_style['fontWeight'] = ''
-        
+        duree_style['fontWeight'] = '' 
     elif "duree-btn" == ctx.triggered_id:
         group_by_columns = 'durée'
         compte_style['backgroundColor'] = 'white'
@@ -527,8 +526,7 @@ def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year,
         
         compte_style['fontWeight'] = ''
         tags_style['fontWeight'] = ''
-        duree_style['fontWeight'] = 'bold'
-        
+        duree_style['fontWeight'] = 'bold'      
     elif "vues-btn" == ctx.triggered_id:
         metric = 'nbVues'
         vues_style['backgroundColor'] = "rgb(22 78 99)"
@@ -601,6 +599,7 @@ def update_main_graph(c,t,d,v,co,l,p,year_value, metric, group_by_columns, year,
 
 @app.callback(
     Output("second_graph", "figure"),
+    Output("main_graph", "clickData"),
     Input("main_graph", "clickData"),
     Input('year_state', 'key'),
     State('group_state', 'key'),
@@ -612,16 +611,16 @@ def update_second_graph(click_data, year, group_by_columns):
         click_label = click_data['points'][0]['label']
         
         if group_by_columns == 'durée':
-            return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+            return second_graph.get_figure(dataframe, [group_by_columns, click_label], year), None
         
         click_current_path = click_data['points'][0]['currentPath']
         if click_current_path == '/':
-            return second_graph.get_figure(dataframe, None, year)
+            return second_graph.get_figure(dataframe, None, year), None
         
         if click_label in ['France', 'Canada', 'Belgique', 'Suisse']:
-            return second_graph.get_figure(dataframe, ['pays', click_label], year)
+            return second_graph.get_figure(dataframe, ['pays', click_label], year), None
 
-        return second_graph.get_figure(dataframe, [group_by_columns, click_label], year)
+        return second_graph.get_figure(dataframe, [group_by_columns, click_label], year), None
 
     # If the callback is triggered by a change of dates
-    return second_graph.get_figure(dataframe, None, year)
+    return second_graph.get_figure(dataframe, None, year), None

@@ -74,7 +74,7 @@ def extract_tags_from_descriptions(data):
 
 # Transformation du dataset pour regrouper les durées en catégories distrinctes
 def group_length(data):
-    data['durée'] = ['<' + str(np.ceil(d / 60) * 60) if d > 0 else '<60' for d in data['durée'] ]
+    data['durée'] = ['<' + str(np.ceil(d / 60) * 60) if d > 0 else '<60.0' for d in data['durée'] ]
 
 # Transformation du dataset pour enlever les colonnes inutiles
 def remove_unused_columns(data):

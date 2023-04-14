@@ -14,10 +14,11 @@ def get_figure(data, selected, year):
     group_by_column is the column to consider, it can be either "compte", "durée" ou "tags"
     year is the year(s) to display, it can be either 2019, 2020, 2021, 2022 or "all"
     """
-
     start_year, end_year = year.split("-")
 
     data_to_display = preprocess.line_graph(data, selected, year)
+    min_date = min(data_to_display['date_str'])
+    max_date = max(data_to_display['date_str'])
 
     fig = px.line(data_to_display, x="date_str", y="n_post")
 
@@ -60,7 +61,7 @@ def get_figure(data, selected, year):
         rangemode="tozero",
     )
 
-    fig = add_covid_info(fig, start_year, end_year)
+    fig = add_covid_info(fig, min_date, max_date)
     # Affichage des titres et definition des couleurs des graphiques de droite
     if selected is None:
         if start_year != end_year:
@@ -104,8 +105,9 @@ def get_figure(data, selected, year):
 
 
 def add_covid_info(fig, start, end):
-    start_date = datetime.datetime.strptime(start, "%Y")
-    end_date = datetime.datetime.strptime(str(int(end) + 1), "%Y")
+    print(end)
+    start_date = datetime.datetime.strptime(start, "%Y-%m")
+    end_date = datetime.datetime.strptime(end, "%Y-%m")
     start_covid = datetime.datetime.strptime("2020-03-01", "%Y-%m-%d")
     end_covid = datetime.datetime.strptime("2022-03-01", "%Y-%m-%d")
 
