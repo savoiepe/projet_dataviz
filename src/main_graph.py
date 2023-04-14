@@ -30,6 +30,7 @@ def bar_chart(data, group_by_column, metric):
     fig.update_layout(title_x=0.5)
     fig.update_traces(marker_color='rgb(50, 141, 207)')
     fig.update_layout(xaxis={'categoryorder':'array', 'categoryarray':['<60','<60.0', '<120.0', '<180.0','<240.0','<300.0','<360.0','<420.0','<480.0','<540.0','<600.0']})
+    fig.update_traces(hovertemplate="Durée: <b>%{x} </b>secondes(s)<br>Nombre de "+ metric[2:] +": <b>%{value}</b><extra></extra>")
     return fig
 
 
