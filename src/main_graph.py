@@ -58,7 +58,7 @@ def treemap_chart(data, group_by_column, metric):
             color_discrete_map={"(?)":"lightgrey"}
         )
         fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
-        fig.update_traces(hovertemplate='sujet: <b>%{label}</b><br>nombre d\'occurence: <b>%{value}</b><extra></extra>')
+        fig.update_traces(hovertemplate='sujet: <b>%{label}</b><br>nombre d\'occurences: <b>%{value}</b><extra></extra>')
         return fig
 
 
