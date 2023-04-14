@@ -27,6 +27,7 @@ import second_graph
 
 app = dash.Dash(__name__)
 app.title = "PROJET | INF8808"
+server = app.server
 
 dataframe = pd.read_csv("./assets/data/tiktokMediasFranco.csv")
 preprocess.preprocess_initial(dataframe)
