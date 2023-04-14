@@ -46,6 +46,7 @@ def treemap_chart(data, group_by_column, metric):
                                 "Suisse":"rgb(6, 122, 39)","Belgique":"rgb(255, 205, 0)"} 
         )
         fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),title_x=0.5)
+        fig.update_traces(hovertemplate="<b>%{label}</b><br>Nombre de "+ metric[2:] +": <b>%{value}</b><extra></extra>")        
         return fig
 
     if group_by_column == 'tags':
