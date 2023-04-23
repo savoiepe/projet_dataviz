@@ -250,13 +250,13 @@ app.layout = html.Div(
                                 showTips=False,
                                 showAxisDragHandles=False,
                                 doubleClick=False,
-                                displayModeBar=False,
+                                displayModeBar=False
                             ),
                         ),
                     ],
                    style={
                         'position': 'fixed',
-                        'right': '30px',
+                        'right': '15%',
                         'bottom': '82%',
                         'width': '275px',
                         'height': '275px',
@@ -419,7 +419,7 @@ app.layout = html.Div(
                             n_clicks = 0
                         ),
                         html.Button(
-                            "Sujets",
+                            "Hashtags",
                             id="tags-btn",
                             style={
                                 "backgroundColor": "white",
