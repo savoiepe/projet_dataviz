@@ -52,9 +52,9 @@ def treemap_chart(data, group_by_column, metric):
     if group_by_column == 'tags':
         fig = px.treemap(
             data, 
-            path=[px.Constant("Tous les sujets"), group_by_column], 
+            path=[px.Constant("Tous les hashtags"), group_by_column], 
             values = metric,
-            title='Répartition des sujets selon le nombre de ' + metric[2:],
+            title='Répartition des hashtags selon le nombre de ' + metric[2:],
             color='tags',
             color_discrete_sequence=["rgb(50, 141, 207)"],
             color_discrete_map={"(?)":"lightgrey"}

@@ -250,7 +250,9 @@ app.layout = html.Div(
                                 showTips=False,
                                 showAxisDragHandles=False,
                                 doubleClick=False,
-                                displayModeBar=False,
+                                displayModeBar=False, 
+                                animation=dict(enabled=False),
+                                staticPlot=True
                                 animation=dict(enabled=False),
                                 staticPlot=True
                             ),
@@ -258,6 +260,7 @@ app.layout = html.Div(
                     ],
                    style={
                         'position': 'fixed',
+                        'right': '5%',
                         'right': '5%',
                         'bottom': '82%',
                         'width': '275px',
@@ -421,7 +424,7 @@ app.layout = html.Div(
                             n_clicks = 0
                         ),
                         html.Button(
-                            "Sujets",
+                            "Hashtags",
                             id="tags-btn",
                             style={
                                 "backgroundColor": "white",
