@@ -253,8 +253,6 @@ app.layout = html.Div(
                                 displayModeBar=False, 
                                 animation=dict(enabled=False),
                                 staticPlot=True
-                                animation=dict(enabled=False),
-                                staticPlot=True
                             ),
                         ),
                     ],
