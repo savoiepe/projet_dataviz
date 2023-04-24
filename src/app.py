@@ -250,13 +250,15 @@ app.layout = html.Div(
                                 showTips=False,
                                 showAxisDragHandles=False,
                                 doubleClick=False,
-                                displayModeBar=False
+                                displayModeBar=False, 
+                                animation=dict(enabled=False),
+                                staticPlot=True
                             ),
                         ),
                     ],
                    style={
                         'position': 'fixed',
-                        'right': '15%',
+                        'right': '5%',
                         'bottom': '82%',
                         'width': '275px',
                         'height': '275px',
